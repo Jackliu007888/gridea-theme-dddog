@@ -1,0 +1,40 @@
+<% if (curRelatedPosts.length) { %>
+  <article class="related-content">
+    <h3 id="related" class="title">
+      <span class="line line-left"></span>
+      <span class="txt">相关内容</span>
+      <span class="line line-right"></span>
+    </h3>
+    <ul class="main-list-content">
+      <% curRelatedPosts.forEach(function (post, index) { %>
+        <% if(index % 3 === 0) { %>
+          <li class="list-item">
+            <ul>
+              <%- include('./fragment/mask', {post}) %>
+              <%- include('./fragment/cover', {cover: post.feature, coverTitle: 'awa' }) %>
+              <%- include('./fragment/abstract', {abstract: post.abstract}) %>
+            </ul>
+          </li>
+        <% } %>
+        <% if(index % 3 === 1) { %>
+          <li class="list-item">
+            <ul>
+              <%- include('./fragment/cover', {cover: post.feature, coverTitle: 'awa' }) %>
+              <%- include('./fragment/mask', {post}) %>
+              <%- include('./fragment/abstract', {abstract: post.abstract}) %>
+            </ul>
+          </li>
+        <% } %>
+        <% if(index % 3 === 2) { %>
+          <li class="list-item">
+            <ul>
+              <%- include('./fragment/mask', {post}) %>
+              <%- include('./fragment/cover', {cover: post.feature, coverTitle: 'awa' }) %>
+              <%- include('./fragment/abstract', {abstract: post.abstract}) %>
+            </ul>
+          </li>
+        <% } %>
+      <% }) %>
+    </ul>
+  </article>
+<% } %>

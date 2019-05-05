@@ -1,0 +1,74 @@
+<article class="main-article">
+  <div class="article-mask">
+    <h1 class="h1-title"><span><%= post.title %></span></h1>
+    <ul class="author-title-desc">
+      <li class="author">
+        <%- include('./fragment/avatar', { avatar: themeConfig.domain + '/images/avatar.png' }) %>
+        <div class="desc">
+          <%- include('./fragment/author', {author: 'JackLiu', date: post.dateFormat}) %>
+        </div>
+      </li>
+      <%- include('./fragment/label', {tags: post.tags}) %>
+    </ul>
+  </div>
+  <img 
+    class="article-banner" 
+    src="<%= post.feature %>" />
+  <div class="article-media">
+    <p>
+      <% if (post.audio) {%>
+        <audio
+          src="<%= post.audio %>"
+          autoplay="autoplay"
+          loop="loop"
+          controls="controls" />
+      <% } %>
+    </p>
+  </div>
+  <div class="main-article_content markdown-body">
+    <%- post.content %>
+  </div>
+  <div class="label-list">
+    <%- include('./fragment/label', {tags: post.tags}) %>
+  </div>
+</article>
+<aside class="aside-wrapper">
+  <ul class="author">
+    <h3 class="title">
+      <span class="line-left"></span>
+      <span class="txt">作者信息</span>
+      <span class="line-right"></span>
+    </h3>
+    <li>
+      <%- include('./fragment/avatar', { avatar: themeConfig.domain + '/images/avatar.png' }) %>
+    </li>
+    <li class="name">JackLiu</l>
+    <li class="career">
+      <span>Web 前端</span>
+    </li>
+    <li class="desc">
+      会点产品、会点前端、会点后端
+    </li>
+    <li class="symbol" v-if="getAuthor($page).socialization">
+      <template v-for="(social, index) of Object.keys(getAuthor($page).socialization)">
+        <span v-if="index > 0">, </span>
+        <a
+          :href="(social === 'email' ? 'mailto:' : '') +  getAuthor($page).socialization[social]">
+          <i>{{ socialMap[social].name }}</i>
+        </a>
+      </template>
+    </li>
+    <li class="reward">
+      <div class="desc">If it can help you，you may buy me a coffee :)</div>
+      <img class="qrcode" src="https://www.dddog.com.cn/static/reward/jackliu.jpg" alt="qrcode" :title="getAuthor($page).name">
+    </li>
+  </ul>
+  <div class="label">
+    <h3><span class="txt">标签</span><span class="line"></span></h3>
+    <div class="item-wrapper">
+      <% site.tags.filter(d => d.used).forEach(function(tag) { %>
+        <span><%= tag.name %></span>
+      <% }); %>
+    </div>
+  </div>
+</aside>

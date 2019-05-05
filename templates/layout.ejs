@@ -1,0 +1,445 @@
+<div class="layout">
+  <header class="header">
+    <h1>
+      <a
+        @click.stop.prevent="$router.push('/')"
+        href="/"
+        :title="$site.title">{{ $site.title }}</a>
+    </h1>
+    <nav>
+      <h2>导航</h2>
+      <li v-for="nav of $site.themeConfig.nav">
+        <a
+          @click.stop.prevent="handleClickNav(nav)"
+          :href="nav.link"
+          :title="nav.text"
+          :class="{
+            'active': $page.frontmatter.nav === nav.name
+          }">{{ nav.text }}</a>
+      </li>
+    </nav>
+  </header>
+  <main
+    class="main"
+    v-if="$page.frontmatter.layout === 'home' ||
+      $page.frontmatter.layout === 'category'">
+    <article class="main-banner">
+      <h2 id="banner">推荐内容</h2>
+      <div v-for="post of [bannerPosts[bannerIndex]].filter(p => p)" class="main-banner-content">
+        <img class="banner-img" :src="post.frontmatter.cover" :alt="post.frontmatter['cover-title']" :title="post.frontmatter['cover-title']"/>
+        <div class="slot">
+          <img
+            class="avatar"
+            :src="getAuthor(post).avatar"
+            :alt="`${getAuthor(post).name}的头像`"
+            :title="`${getAuthor(post).name}头像`"/>
+          <ul>
+            <li class="label"><span v-for="label of post.frontmatter.labels">{{ labelMap[label] }}</span></li>
+            <li class="author-title">
+              <a
+                @click.stop.prevent="$router.push(post.path)"
+                :href="post.path"
+                :title="post.title"
+                >{{ post.title }}</a>
+            </li>
+            <li class="author-desc">
+              <span>{{ getAuthor(post).name }}</span>
+              <span class="split-symbol">|</span>
+              <span>{{ post.frontmatter.date | fromNow }}</span></li>
+          </ul>
+        </div>
+      </div>
+      <ul class="img-list">
+        <li v-for="(post, index) of bannerPosts" :class="{
+            'active': index === bannerIndex
+          }">
+          <img :src="post.frontmatter.cover" :alt="post.frontmatter['cover-title']" :title="post.frontmatter['cover-title']"/>
+          <div class="mask"></div>
+          <a href="#banner" @click="bannerIndex = index"></a>
+        </li>
+      </ul>
+    </article>
+    <article class="main-list" v-if="curPagePosts.length">
+      <h2 id="page"><span class="txt">最新{{ $page.title || '内容' }}</span><span class="line"></span></h2>
+      <ul class="main-list-content">
+        <li v-for="post of [curPagePosts[0]].filter(p => p)">
+          <ul>
+            <li class="mask">
+              <img
+                class="avatar"
+                :src="getAuthor(post).avatar"
+                :alt="`${getAuthor(post).name}的头像`"
+                :title="`${getAuthor(post).name}头像`"/>
+              <ul>
+                <li class="label"><span v-for="label of post.frontmatter.labels">{{ labelMap[label] }}</span></li>
+                <li class="title">
+                  <a
+                    @click.stop.prevent="$router.push(post.path)"
+                    :href="post.path"
+                    :title="post.title"
+                    >{{ post.title }}</a>
+                </li>
+                <li class="author"><span>{{ getAuthor(post).name }}</span><span class="split-symbol">|</span><span>{{ post.frontmatter.date | fromNow }}</span></li>
+              </ul>
+            </li>
+            <li class="img-wrapper">
+              <img 
+                @click.stop.prevent="$router.push(post.path)"
+                :src="post.frontmatter.cover" 
+                :alt="post.frontmatter['cover-title']" 
+                :title="post.frontmatter['cover-title']"/></li>
+            <li class="desc-text">{{ getExcerpt(post) }}</li>
+          </ul>
+        </li>
+        <li v-for="post of [curPagePosts[1]].filter(p => p)">
+          <ul>
+            <li class="img-wrapper">
+              <img 
+                :src="post.frontmatter.cover" 
+                :alt="post.frontmatter['cover-title']" 
+                @click.stop.prevent="$router.push(post.path)"
+                :title="post.frontmatter['cover-title']"/>
+            </li>
+            <li class="desc-text">{{ getExcerpt(post) }}</li>
+            <li class="mask">
+              <img
+                class="avatar"
+                :src="getAuthor(post).avatar"
+                :alt="`${getAuthor(post).name}的头像`"
+                :title="`${getAuthor(post).name}头像`"/>
+              <ul>
+                <li class="label"><span v-for="label of post.frontmatter.labels">{{ labelMap[label] }}</span></li>
+                <li class="title">
+                  <a
+                    @click.stop.prevent="$router.push(post.path)"
+                    :href="post.path"
+                    :title="post.title"
+                    >{{ post.title }}</a>
+                </li>
+                <li class="author"><span>{{ getAuthor(post).name }}</span><span class="split-symbol">|</span><span>{{ post.frontmatter.date | fromNow }}</span></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li v-for="post of [curPagePosts[2]].filter(p => p)">
+          <ul>
+            <li class="mask">
+              <img
+                class="avatar"
+                :src="getAuthor(post).avatar"
+                :alt="`${getAuthor(post).name}的头像`"
+                :title="`${getAuthor(post).name}头像`"/>
+              <ul>
+                <li class="label"><span v-for="label of post.frontmatter.labels">{{ labelMap[label] }}</span></li>
+                <li class="title">
+                  <a
+                    @click.stop.prevent="$router.push(post.path)"
+                    :href="post.path"
+                    :title="post.title"
+                    >{{ post.title }}</a>
+                </li>
+                <li class="author"><span>{{ getAuthor(post).name }}</span><span class="split-symbol">|</span><span>{{ post.frontmatter.date | fromNow }}</span></li>
+              </ul>
+            </li>
+            <li class="img-wrapper">
+              <img
+                @click.stop.prevent="$router.push(post.path)"
+                :src="post.frontmatter.cover"
+                :alt="post.frontmatter['cover-title']"
+                :title="post.frontmatter['cover-title']"/>
+            </li>
+            <li class="desc-text">{{ getExcerpt(post) }}</li>
+          </ul>
+        </li>
+        <li v-for="post of [curPagePosts[3]].filter(p => p)">
+          <ul>
+            <li class="img-wrapper">
+              <img 
+                @click.stop.prevent="$router.push(post.path)"
+                :src="post.frontmatter.cover" 
+                :alt="post.frontmatter['cover-title']" 
+                :title="post.frontmatter['cover-title']"/>
+            </li>
+            <li class="desc-text">{{ getExcerpt(post) }}</li>
+            <li class="mask">
+              <img
+                class="avatar"
+                :src="getAuthor(post).avatar"
+                :alt="`${getAuthor(post).name}的头像`"
+                :title="`${getAuthor(post).name}头像`"/>
+              <ul>
+                <li class="label"><span v-for="label of post.frontmatter.labels">{{ labelMap[label] }}</span></li>
+                <li class="title">
+                  <a
+                    @click.stop.prevent="$router.push(post.path)"
+                    :href="post.path"
+                    :title="post.title"
+                    >{{ post.title }}</a>
+                </li>
+                <li class="author"><span>{{ getAuthor(post).name }}</span><span class="split-symbol">|</span><span>{{ post.frontmatter.date | fromNow }}</span></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li v-for="post of [curPagePosts[4]].filter(p => p)">
+          <ul>
+            <li class="mask">
+              <img
+                class="avatar"
+                :src="getAuthor(post).avatar"
+                :alt="`${getAuthor(post).name}的头像`"
+                :title="`${getAuthor(post).name}头像`"/>
+              <ul>
+                <li class="label"><span v-for="label of post.frontmatter.labels">{{ labelMap[label] }}</span></li>
+                <li class="title">
+                  <a
+                    @click.stop.prevent="$router.push(post.path)"
+                    :href="post.path"
+                    :title="post.title"
+                    >{{ post.title }}</a>
+                </li>
+                <li class="author"><span>{{ getAuthor(post).name }}</span><span class="split-symbol">|</span><span>{{ post.frontmatter.date | fromNow }}</span></li>
+              </ul>
+            </li>
+            <li class="img-wrapper">
+              <img 
+                @click.stop.prevent="$router.push(post.path)"
+                :src="post.frontmatter.cover" 
+                :alt="post.frontmatter['cover-title']" 
+                :title="post.frontmatter['cover-title']"/>
+            </li>
+            <li class="desc-text">{{ getExcerpt(post) }}</li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="page-turn">
+        <li class="turn-up"
+          :class="{
+            'disable': !this.postPagination[this.pageIndex - 1]
+          }"><a href="#page" @click="prePage">上一页</a></li>
+        <li class="turn-down"
+          :class="{
+            'disable': !this.postPagination[this.pageIndex + 1]
+          }"><a href="#page" @click="nextPage">下一页</a></li>
+      </ul>
+    </article>
+  </main>
+  <main
+    class="main article-wrapper"
+    v-if="$page.frontmatter.layout === 'post'">
+    <article class="main-article">
+      <div class="article-mask">
+        <h1 class="h1-title"><span>{{ $page.title }}</span></h1>
+        <ul class="author-title-desc">
+          <li class="author">
+            <img
+              class="avatar"
+              :src="getAuthor($page).avatar"
+              :alt="`${getAuthor($page).name}的头像`"
+              :title="`${getAuthor($page).name}头像`"/>
+            <div class="desc">
+              <span>{{ getAuthor($page).name }}</span>
+              <span class="split-symbol">|</span>
+              <span>{{ $page.frontmatter.date | fromNow }}</span>
+            </div>
+          </li>
+          <li class="label"><span v-for="label of $page.frontmatter.labels">{{ labelMap[label] }}</span></li>
+        </ul>
+      </div>
+      <img class="article-banner" :src="$page.frontmatter.cover" :alt="$page.frontmatter['cover-title']" :title="$page.frontmatter['cover-title']"/>
+      <div class="article-media">
+        <p>
+          <audio
+          v-if="$page.frontmatter.audio"
+          :src="$page.frontmatter.audio"
+          autoplay="autoplay"
+          loop="loop"
+          controls="controls"/>
+        </p>
+      </div>
+      <div class="main-article_content markdown-body">
+        <Content/>
+      </div>
+      <div class="label-list">
+        <div v-for="label of $page.frontmatter.labels" class="label"><span>{{ labelMap[label] }}</span></div>
+      </div>
+    </article>
+    <aside class="aside-wrapper">
+      <ul class="author">
+        <h3 class="title">
+          <span class="line-left"></span>
+          <span class="txt">作者信息</span>
+          <span class="line-right"></span>
+        </h3>
+        <li>
+          <img
+            class="avatar"
+            :src="getAuthor($page).avatar"
+            :alt="`${getAuthor($page).name}的头像`"
+            :title="`${getAuthor($page).name}头像`"/>
+        </li>
+        <li class="name">{{ getAuthor($page).name }}</l>
+        <li class="career">
+          <span v-for="(label, index) of getAuthor($page).labels"><span v-if="index > 0">, </span>{{ label }}</span>
+        </li>
+        <li class="desc">
+          {{ getAuthor($page).desc }}
+        </li>
+        <li class="symbol" v-if="getAuthor($page).socialization">
+          <template v-for="(social, index) of Object.keys(getAuthor($page).socialization)">
+            <span v-if="index > 0">, </span>
+            <a
+              :href="(social === 'email' ? 'mailto:' : '') +  getAuthor($page).socialization[social]">
+              <i>{{ socialMap[social].name }}</i>
+            </a>
+          </template>
+        </li>
+        <li class="reward">
+          <div class="desc">{{getAuthor($page).rewardDesc}}</div>
+          <img class="qrcode" :src="getAuthor($page).rewardCode" alt="qrcode" :title="getAuthor($page).name">
+        </li>
+      </ul>
+      <div class="category">
+        <h3><span class="txt">分类</span><span class="line"></span></h3>
+        <div class="item-wrapper">
+          <span v-for="(category, index) of categories">
+            <a
+             @click.stop.prevent="$router.push(`${category.path}#page`)"
+             :href="category.path"
+             :title="category.name">
+             {{ category.name }}
+           </a>
+          </span>
+        </div>
+      </div>
+      <div class="label">
+        <h3><span class="txt">标签</span><span class="line"></span></h3>
+        <div class="item-wrapper">
+          <span v-for="(label) of Object.keys(labelMap)">{{ labelMap[label] }}</span>
+        </div>
+      </div>
+    </aside>
+    <article class="related-content" v-if="curRelatedPosts.length">
+      <h3 id="related" class="title">
+        <span class="line line-left"></span>
+        <span class="txt">相关内容</span>
+        <span class="line line-right"></span>
+      </h3>
+      <ul class="main-list-content">
+        <li class="list-item" v-for="post of [curRelatedPosts[0]].filter(p => p)">
+          <ul>
+            <li class="mask">
+              <img
+                class="avatar"
+                :src="getAuthor(post).avatar"
+                :alt="`${getAuthor(post).name}的头像`"
+                :title="`${getAuthor(post).name}头像`"/>
+              <ul class="desc">
+                <li class="label"><span v-for="label of post.frontmatter.labels">{{ labelMap[label] }}</span></li>
+                <li class="title">
+                  <a
+                    @click.stop.prevent="$router.push(post.path)"
+                    :href="post.path"
+                    :title="post.title"
+                    >{{ post.title }}</a>
+                </li>
+                <li class="author-desc"><span>{{ getAuthor(post).name }}</span><span class="split-symbol">|</span><span>{{ post.frontmatter.date | fromNow }}</span></li>
+              </ul>
+            </li>
+            <li class="img-wrapper"><img :src="post.frontmatter.cover" :alt="post.frontmatter['cover-title']" :title="post.frontmatter['cover-title']"/></li>
+            <li class="desc-text">{{ getExcerpt(post) }}</li>
+          </ul>
+        </li>
+        <li class="list-item" v-for="post of [curRelatedPosts[1]].filter(p => p)">
+          <ul>
+            <li class="img-wrapper"><img :src="post.frontmatter.cover" :alt="post.frontmatter['cover-title']" :title="post.frontmatter['cover-title']"/></li>
+            <li class="mask">
+              <img
+                class="avatar"
+                :src="getAuthor(post).avatar"
+                :alt="`${getAuthor(post).name}的头像`"
+                :title="`${getAuthor(post).name}头像`"/>
+              <ul class="desc">
+                <li class="label"><span v-for="label of post.frontmatter.labels">{{ labelMap[label] }}</span></li>
+                <li class="title">
+                  <a
+                    @click.stop.prevent="$router.push(post.path)"
+                    :href="post.path"
+                    :title="post.title"
+                    >{{ post.title }}</a>
+                </li>
+                <li class="author-desc"><span>{{ getAuthor(post).name }}</span><span class="split-symbol">|</span><span>{{ post.frontmatter.date | fromNow }}</span></li>
+              </ul>
+            </li>
+            <li class="desc-text">{{ getExcerpt(post) }}</li>
+          </ul>
+        </li>
+        <li class="list-item" v-for="post of [curRelatedPosts[2]].filter(p => p)">
+          <ul>
+            <li class="mask">
+              <img
+                class="avatar"
+                :src="getAuthor(post).avatar"
+                :alt="`${getAuthor(post).name}的头像`"
+                :title="`${getAuthor(post).name}头像`"/>
+              <ul class="desc">
+                <li class="label"><span v-for="label of post.frontmatter.labels">{{ labelMap[label] }}</span></li>
+                <li class="title">
+                  <a
+                    @click.stop.prevent="$router.push(post.path)"
+                    :href="post.path"
+                    :title="post.title"
+                    >{{ post.title }}</a>
+                </li>
+                <li class="author-desc"><span>{{ getAuthor(post).name }}</span><span class="split-symbol">|</span><span>{{ post.frontmatter.date | fromNow }}</span></li>
+              </ul>
+            </li>
+            <li class="img-wrapper"><img :src="post.frontmatter.cover" :alt="post.frontmatter['cover-title']" :title="post.frontmatter['cover-title']"/></li>
+            <li class="desc-text">{{ getExcerpt(post) }}</li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="page-turn">
+        <li class="turn-up"
+          :class="{
+            'disable': !this.relatedPostPagination[this.relatedPageIndex - 1]
+          }"><a href="#related" @click="preRelatedPage">上一页</a></li>
+        <li class="turn-down"
+          :class="{
+            'disable': !this.relatedPostPagination[this.relatedPageIndex + 1]
+          }"><a href="#related" @click="nextRelatedPage">下一页</a></li>
+      </ul>
+    </article>
+  </main>
+  <main
+    class="main article-wrapper"
+    v-if="$page.frontmatter.layout === 'page'"
+    >
+    <article class="main-article main-page">
+      <h1>{{ $page.title }}</h1>
+      <div class="main-article_content markdown-body">
+        <Content/>
+      </div>
+    </article>
+  </main>
+  <footer class="footer">
+    <ul class="footer-left">
+      <li>
+        <a
+          @click.stop.prevent="$router.push('/other/disclaimer.html')"
+          href="/other/disclaimer.html"
+          title="免责声明">免责声明</a>
+        <!-- <a
+          @click.stop.prevent="$router.push('/other/contact.html')"
+          href="/other/contact.html"
+          title="联系我们">联系我们</a> -->
+      </li>
+      <li>© 2016-2018 dddog.com.cn</li>
+    </ul>
+    <ul class="footer-right">
+      <li class="">
+        开发 <a href="https://github.com/xianyukeji" target="_blank">咸鱼科技</a>，设计 <a href="https://dribbble.com/unnoman" target="_blank">Abdullah Un Noman</a></li>
+      <li>湘ICP备16020843号</li>
+    </ul>
+  </footer>
+</div>

@@ -1,0 +1,30 @@
+<header class="header">
+  <h1>
+    <a href="/" title="<%= themeConfig.siteName %>">
+      <%= themeConfig.siteName %>
+    </a>
+  </h1>
+  <nav>
+    <h2>导航</h2>
+    <% menus.filter(d => d.link !== '/archives' && d.link !== '/tags').concat(site.tags.filter(d => d.used)).forEach(function(menu) { %>
+      <li>
+        <% if (menu.openType === 'External') { %>
+          <a
+            href="<%= menu.link %>"
+            title="<%= menu.name %>"
+            target="_blank"
+            >
+            <%= menu.name %>
+          </a>
+        <% } else { %>
+          <a
+            href="<%= menu.link %>"
+            title="<%= menu.name %>"
+            :class="{
+              'active': $page.frontmatter.nav === nav.name
+            }"><%= menu.name %></a>
+        <% } %>
+      </li>
+    <% }); %>
+  </nav>
+</header>

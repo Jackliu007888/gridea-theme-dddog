@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <%- include('./includes/head', { siteTitle: themeConfig.siteName }) %>
+  </head>
+  <body>
+    <div class="main layout">
+      <%- include('./includes/header') %>
+      <div class="main">
+        <%- include('./includes/swiper2') %>
+        <% if (frontmatter.layout === 'home' || frontmatter.layout === 'category') { %>
+          <%- include('./includes/list') %>
+          <%- include('./includes/footer') %>
+        <% } %>
+      </div>
+    </div>
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.common.dev.js"></script>
+    <script>
+      const posts = <%- JSON.stringify(posts) %>
+      new Vue({
+        el: '#swiper',
+        data() {
+          return {
+            posts
+          }
+        }
+      })
+      console.log(posts)
+    </script>
+  </body>
+</html>

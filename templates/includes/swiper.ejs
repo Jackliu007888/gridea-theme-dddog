@@ -1,0 +1,49 @@
+<article class="main-banner">
+  <h2 id="banner">推荐内容</h2>
+  <div class="main-banner-content">
+    <img class="banner-img" src="<%= posts.find(d => d.feature).feature %>" :alt="post.frontmatter['cover-title']" :title="post.frontmatter['cover-title']"/>
+    <div class="slot">
+      <img
+        class="avatar"
+        src="<%= themeConfig.domain %>/images/avatar.png"
+        title="作者头像"/>
+      <ul>
+        <li class="label">
+          <% posts.find(d => d.feature).tags.forEach(function(tag) { %>
+            <span><%= tag.name %></span>
+          <% }); %>
+        </li>
+        <li class="author-title">
+          <a
+            href="<%= posts.find(d => d.feature).link %>"
+            title="<%= posts.find(d => d.feature).title %>"
+            ><%= posts.find(d => d.feature).title %></a>
+        </li>
+        <li class="author-desc">
+          <span><%= site.customConfig.name %></span> %>
+          <span class="split-symbol">|</span>
+          <span><%= posts.find(d => d.feature).dateFormat %></span></li>
+      </ul>
+    </div>
+  </div>
+  <ul class="img-list">
+   <% posts.filter(d => d.feature).slice(0, 5).forEach(function(post) { %>
+      <li :class="{
+          'active': index === bannerIndex
+        }">
+        <img src="<%= post.feature %>" title="<%= post.title %>" />
+        <div class="mask"></div>
+        <a href="#banner" @click="bannerIndex = index"></a>
+      </li>
+    <% }); %>
+  </ul>
+</article>
+<script>
+  const posts = <%- JSON.stringify(posts.map(d => ({
+    ...d,
+    title: d.title,
+    feature: d.feature
+  }))) %>
+
+  console.log(posts)
+</script>

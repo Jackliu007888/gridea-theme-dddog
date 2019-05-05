@@ -1,0 +1,10 @@
+<li class="mask">
+  <%- include('./avatar', {avatar: themeConfig.domain + '/images/avatar.png' }) %>
+  <ul>
+    <%- include('./label', {tags: post.tags}) %>
+    <%- include('./title', {href: post.link, title: post.title}) %>
+    <li class="author">
+      <%- include('./author', {author: 'JackLiu', date: post.dateFormat}) %>
+    </li>
+  </ul>
+</li>

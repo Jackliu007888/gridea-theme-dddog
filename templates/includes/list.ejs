@@ -1,0 +1,70 @@
+<article class="main-list">
+  <h2 id="page"><span class="txt">最新{{ $page.title || '内容' }}</span><span class="line"></span></h2>
+  <ul class="main-list-content">
+    <% posts.forEach(function(post, index) { %>
+      <% if (index % 5 === 0) { %>
+        <li>
+          <ul>
+            <%- include('./fragment/mask', {post}) %>
+            <%- include('./fragment/cover', {cover: post.feature, coverTitle: 'awa' }) %>
+            <%- include('./fragment/abstract', {abstract: post.abstract}) %>
+          </ul>
+        </li>
+      <% } %>
+      <% if (index % 5 === 1) { %>
+        <li>
+          <ul>
+            <%- include('./fragment/cover', {cover: post.feature, coverTitle: 'awa' }) %>
+            <%- include('./fragment/abstract', {abstract: post.abstract}) %>
+            <%- include('./fragment/mask', {post}) %>
+          </ul>
+        </li>
+      <% } %>
+      <% if (index % 5 === 2) { %>
+        <li>
+          <ul>
+            <%- include('./fragment/mask', {post}) %>
+            <%- include('./fragment/cover', {cover: post.feature, coverTitle: 'awa' }) %>
+            <%- include('./fragment/abstract', {abstract: post.abstract}) %>
+          </ul>
+        </li>
+      <% } %>
+      <% if (index % 5 === 3) { %>
+        <li>
+          <ul>
+            <%- include('./fragment/cover', {cover: post.feature, coverTitle: 'awa' }) %>
+            <%- include('./fragment/abstract', {abstract: post.abstract}) %>
+            <%- include('./fragment/mask', {post}) %>
+          </ul>
+        </li>
+      <% } %>
+      <% if (index % 5 === 4) { %>
+        <li>
+          <ul>
+            <%- include('./fragment/mask', {post}) %>
+            <%- include('./fragment/cover', {cover: post.feature, coverTitle: 'awa' }) %>
+            <%- include('./fragment/abstract', {abstract: post.abstract}) %>
+          </ul>
+        </li>
+      <% } %>
+    <% }); %>
+  </ul>
+  <ul class="page-turn">
+    <% if (pagination.prev) { %>
+      <li class="turn-up"
+        :class="{
+          'disable': !this.postPagination[this.pageIndex - 1]
+        }">
+        <a href="<%= pagination.prev %>">上一页</a>
+      </li>
+    <% } %>
+    <% if (pagination.next) { %>
+      <li class="turn-down"
+        :class="{
+          'disable': !this.postPagination[this.pageIndex + 1]
+        }">
+        <a href="<%= pagination.next %>">下一页</a>
+      </li>
+    <% } %>
+  </ul>
+</article>
