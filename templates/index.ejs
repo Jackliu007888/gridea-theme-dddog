@@ -4,13 +4,15 @@
   </head>
   <body>
     <div class="main layout">
-      <%- include('./includes/header') %>
+      <%- include('./includes/header-wrap') %>
       <div class="main">
-        <%- include('./includes/swiper2') %>
-        <% if (frontmatter.layout === 'home' || frontmatter.layout === 'category') { %>
-          <%- include('./includes/list') %>
-          <%- include('./includes/footer') %>
-        <% } %>
+        <%- include('./includes/swiper') %>
+        <%- include('./includes/list', {
+          splitTitle: (function () {
+            return locals.tag && locals.tag.name ? '最新' + tag.name : '最新内容'
+          })()
+        }) %>
+        <%- include('./includes/footer') %>
       </div>
     </div>
     <script src="https://cdn.bootcss.com/vue/2.6.10/vue.common.dev.js"></script>

@@ -1,0 +1,19 @@
+<%- include('./header', {
+  menus: (function () {
+    let newMenus = menus.filter(d => d.link !== '/archives' && d.link !== '/tags').concat(site.tags.filter(d => d.used))
+    return newMenus.map((menu, index) => {
+      let activeClass = ''
+      if(locals.tag && locals.tag.name) {
+        if(tag.name === menu.name) {
+          activeClass = 'active'
+        }
+      } else if (index === 0) {
+        activeClass = 'active'
+      }
+      return {
+        ...menu,
+        activeClass
+      }
+    })
+  })()
+}) %>

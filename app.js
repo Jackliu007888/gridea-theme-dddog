@@ -17,14 +17,6 @@ app.get('/', async (req, res) => {
   const response = await axios.get('https://front-end.dddog.com.cn/list.json')
   res.render('index', {
     ...response.data,
-    frontmatter: {
-      layout: 'home'
-    },
-    site: {
-      ...response.data.site,
-      name: "JackLiu"
-    }
-
   })
 })
 

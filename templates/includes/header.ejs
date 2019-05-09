@@ -6,7 +6,7 @@
   </h1>
   <nav>
     <h2>导航</h2>
-    <% menus.filter(d => d.link !== '/archives' && d.link !== '/tags').concat(site.tags.filter(d => d.used)).forEach(function(menu) { %>
+    <% menus.forEach(function(menu) { %>
       <li>
         <% if (menu.openType === 'External') { %>
           <a
@@ -20,9 +20,7 @@
           <a
             href="<%= menu.link %>"
             title="<%= menu.name %>"
-            :class="{
-              'active': $page.frontmatter.nav === nav.name
-            }"><%= menu.name %></a>
+            class="<%= menu.activeClass %>"><%= menu.name %></a>
         <% } %>
       </li>
     <% }); %>

@@ -1,5 +1,10 @@
 <article class="main-list">
-  <h2 id="page"><span class="txt">最新{{ $page.title || '内容' }}</span><span class="line"></span></h2>
+  <h2 id="page">
+    <span class="txt">
+      <%= splitTitle %>
+    </span>
+    <span class="line"></span>
+  </h2>
   <ul class="main-list-content">
     <% posts.forEach(function(post, index) { %>
       <% if (index % 5 === 0) { %>

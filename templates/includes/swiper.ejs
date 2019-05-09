@@ -33,17 +33,8 @@
         }">
         <img src="<%= post.feature %>" title="<%= post.title %>" />
         <div class="mask"></div>
-        <a href="#banner" @click="bannerIndex = index"></a>
+        <a href="<%= post.link %>"></a>
       </li>
     <% }); %>
   </ul>
 </article>
-<script>
-  const posts = <%- JSON.stringify(posts.map(d => ({
-    ...d,
-    title: d.title,
-    feature: d.feature
-  }))) %>
-
-  console.log(posts)
-</script>
